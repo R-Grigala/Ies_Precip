@@ -6,7 +6,7 @@ from src.api.nsmodels import accounts_ns, user_model, user_parser, request_passw
 from src.utils import mail, url_serializer
 from datetime import datetime, timedelta
 
-# API საკუთარი მონაცემების მიღებისთვის
+# აპი საკუთარი მონაცემების მიღებისთვის
 @accounts_ns.route('/user')
 @accounts_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Forbidden', 404: 'Not Found'})
 class UserApi(Resource):
@@ -23,7 +23,7 @@ class UserApi(Resource):
 
         return user, 200
 
-# API რომელსაც გადაეცემა არგუმენტად მომხმარებლის ID
+# აპი, რომელსაც გადაეცემა არგუმენტად მომხმარებლის ID
 @accounts_ns.route('/user/<int:uuid>')
 @accounts_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Forbidden', 404: 'Not Found'})
 class UserActionsApi(Resource):
@@ -86,7 +86,7 @@ class UserActionsApi(Resource):
         except:
             return {'error': 'მომხმარებლის დარედაქტირების დროს დაფიქსირდა შეცდომა'}, 400
 
-# API ყველა მომხმარებლის ინფორმაციისთვის
+# აპი ყველა მომხმარებლის ინფორმაციისთვის
 @accounts_ns.route('/users')
 @accounts_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Forbidden', 404: 'Not Found'})
 class UsersApi(Resource):
