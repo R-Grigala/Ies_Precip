@@ -24,7 +24,7 @@ class Export_API(Resource):
     @export_ns.doc(parser=export_parser)
     def post(self):
         '''გავფილტროთ მონაცემები სხვადასხვა პარამეტრებით'''
-        # Parse the filter arguments
+        # იპარსება ფილტრის არგუმენტები
         args = export_parser.parse_args()
 
         try:
@@ -72,26 +72,26 @@ class Export_API(Resource):
         for entry in weather_data:
             grouped_data[entry.station_id].append(entry)
 
-        # Apply step filter within each station's dataset
+        # თითოეული სადგურის მონაცემებში გამოიყენება სტეპის ფილტრი
         filtered_data = []
         for station, data in grouped_data.items():
             filtered_data.extend(list(islice(data, 0, None, step)))
 
         filtered_data.sort(key=lambda x: x.precip_time)
         
-        # Create a unique filename for each request
+        # თითოეული მოთხოვნისთვის იქმნება უნიკალური ფაილის სახელი
         file_name = f'{start_date}-{end_date}.csv'
         file_path = os.path.join(Config.EXPORT_DIR, file_name)
 
-        # Create a CSV file and write the filtered data
+        # იქმნება CSV ფაილი და იწერება გაფილტრული მონაცემები
         with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:
             fieldnames = ["precip_time", "station_name", "precip_rate", "precip_accum", "precip_accum_long"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-            # Write the header
+            # იწერება სათაური
             writer.writeheader()
 
-            # Write each row of data as a dictionary
+            # თითოეული სტრიქონი იწერება ლექსიკონის სახით
             for data in filtered_data:
                 writer.writerow({
                     "precip_time": data.precip_time,
@@ -101,10 +101,10 @@ class Export_API(Resource):
                     "precip_accum_long": data.precip_accum_long
                 })
 
-        # Respond with the file path or URL to access the file
+        # დაბრუნდება ფაილი ჩამოსატვირთად
         try:
             return send_file(file_path, as_attachment=True, download_name=file_name, mimetype='text/csv')
         finally:
-            # Ensure that the file is deleted after download
+            # ჩამოტვირთვის შემდეგ ფაილი იშლება
             if os.path.exists(file_path):
                 os.remove(file_path)

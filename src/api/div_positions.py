@@ -10,6 +10,7 @@ class DivPositionsApi(Resource):
     def get(self):
         '''Fetch all station's current div information'''
 
+        # ყველა სადგურის მიმდინარე div პოზიციების ამოღება
         stations_div_positions = DivPositions.query.all()
         
         if not stations_div_positions:
@@ -17,6 +18,7 @@ class DivPositionsApi(Resource):
 
         result = []
 
+        # პასუხი ფორმატდება ფრონტის მიერ გამოყენებადი ველების მიხედვით
         for i in stations_div_positions:
 
             data = {

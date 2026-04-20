@@ -6,6 +6,7 @@ from src.extensions import api
 weather_ns = api.namespace('Weather', description='API endpoint for Station related operations', path='/api')
 
 
+# ამინდის ჩანაწერის სვაგერის მოდელი
 weather_model = weather_ns.model('weather', {
     'id': fields.Integer(required=True, description='Project id', example=1),
     'station_id': fields.Integer(required=True, description='The ID of the related project'),
@@ -17,5 +18,6 @@ weather_model = weather_ns.model('weather', {
 
 weather_parser = reqparse.RequestParser()
 
+# ამ endpoint-ში მისაღები მოთხოვნის პარამეტრები
 weather_parser.add_argument("weather_name", required=True, type=str, help="Project name example: AKHN Project")
 

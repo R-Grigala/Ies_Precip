@@ -17,10 +17,10 @@ class FilterAPI(Resource):
     @filter_ns.marshal_with(filter_model)
     def post(self):
         '''გავფილტროთ მონაცემები სხვადასხვა პარამეტრებით'''
-        # Parse the filter arguments
+        # იპარსება ფილტრის არგუმენტები
         args = filter_parser.parse_args()
 
-        # Extract filter parameters
+        # ამოიკრიფება ფილტრის პარამეტრები
         try:
             date = datetime.strptime(args['date'], '%Y-%m-%d').date()
         except ValueError:

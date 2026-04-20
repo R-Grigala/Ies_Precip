@@ -11,7 +11,7 @@ registration_parser.add_argument('password', type=str, required=True, help="გ�
 registration_parser.add_argument('passwordRepeat', type=str, required=True, help='გთხოვთ გაიმეორეთ პაროლი')
 registration_parser.add_argument('role_name', type=str, required=False, default='User', help="შეიყვანეთ როლი (User/Admin)")
 
-# Auth parser
+# ავტორიზაციის პარსერი
 auth_parser = reqparse.RequestParser()
 auth_parser.add_argument("email", required=True, type=str, help="გთხოვთ შეიყვანეთ მეილი luka.varsimashvili@iliauni.edu.ge")
 auth_parser.add_argument("password", required=True, type=str, help="გთხოვთ შეიყვანეთ პაროლი")

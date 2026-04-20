@@ -25,6 +25,7 @@ class StationsListAPI(Resource):
             return {"error": "სადგურები არ მოიძებნა."}, 404
         
         result = []
+        # თითოეულ სადგურს ემატება შესაბამისი map_selected მნიშვნელობა div_positions-იდან
         for station in stations:
             div_pos = DivPositions.query.filter_by(station_id=station.id).first()
             result.append({
@@ -50,7 +51,6 @@ class StationsListAPI(Resource):
         identity = get_jwt_identity()
 
         # მოწმდება რამდენად აქვთ მომხმარებელს სადგურის დამატების უფლება
-
         admin = User.query.filter_by(uuid=identity).first()
         if not admin.check_permission():
             return {"error": 'თქვენ არ გაქვთ სადგურის დამატების უფლება'}, 403
@@ -58,7 +58,6 @@ class StationsListAPI(Resource):
         args = stations_parser.parse_args()
 
         # მითითებული ლინკი იყოფა ნაწილებად, სადაც ბოლო ნაწილი ყოველთვის რჩება სადგურის ID რისი საშუალებითაც იქმნება API ლინკი
-
         shorten_station_name = args.get('url').split('/')[-1]
         api_url = f'https://api.weather.com/v2/pws/observations/current?apiKey=e1f10a1e78da46f5b10a1e78da96f525&stationId={shorten_station_name}&numericPrecision=decimal&format=json&units=m'
 
@@ -66,20 +65,17 @@ class StationsListAPI(Resource):
 
 
         # მოწმდება რამდენად შესაძლებელია სადგურის დამატება
-
         station = Stations.query.filter_by(url=url).first()
         if station:
             return {'error': 'აღნიშნული სადგური უკვე არსებობს'}, 400
 
-        # API-ის ლინკთან კავშირის დამყარება, რომ გავიგოთ სადგური არსებობს თუ არა
-
+        # აპი-ლინკთან კავშირის დამყარება, რომ გავიგოთ სადგური არსებობს თუ არა
         response = requests.get(api_url)
 
         if response.status_code != 200:
             return {'error': 'გთხოვთ შეიყვანეთ სწორი ლინკი'}, 400
         
         # იქმნება სადგური მომხმარებლის მიერ შეყვანილი პარამეტრებით
-
         new_station = Stations(station_name = args.get('station_name'),
                                url = url,
                                api = api_url,
@@ -91,7 +87,6 @@ class StationsListAPI(Resource):
         new_station.create()
 
         # ასევე ემატება პოზიციების ცხრილში, default მონაცემებით
-
         new_div_position = DivPositions(station_id=new_station.id,
                                         static_px=-20,
                                         left_right=20,
@@ -108,7 +103,6 @@ class StationsListAPI(Resource):
         new_div_position.create()
 
         # ემატება precip ცხრილშიც, რადგან მოხდეს მისი pa_long ის დათვლა
-
         new_prev_precip = PrevPrecip(station_id=new_station.id,
                                      prev_pa=0,
                                      last_pa_long=0,
@@ -133,6 +127,7 @@ class StationsAPI(Resource):
         
         div_pos = DivPositions.query.filter_by(station_id=id).first()
         
+        # map_selected ბრუნდება div_positions-იდან; თუ ჩანაწერი არ არის, ნაგულისხმევი მნიშვნელობაა 1
         return {
             'id': station.id,
             'station_name': station.station_name,
@@ -152,7 +147,6 @@ class StationsAPI(Resource):
         '''კონკრეტული სადგურის რედაქტირება'''
 
         # მოწმდება მომხმარებლის უფლებები, თუ აქვს მას სადგურის რედაქტირების უფლება
-
         identity = get_jwt_identity()
 
         admin = User.query.filter_by(uuid=identity).first()
@@ -160,7 +154,6 @@ class StationsAPI(Resource):
             return {"error": 'თქვენ არ გაქვთ სადგურის რედაქტირების უფლება'}, 403
 
         # ვეძებთ მითითებული ID-ით სადგურს
-
         station = Stations.query.filter_by(id=id).first()
         if not station:
             return {"error": "სადგური არ მოიძებნა."}, 404
@@ -172,11 +165,9 @@ class StationsAPI(Resource):
         args = stations_parser.parse_args()
 
         # ვეძებთ სადგურს, რომელსაც გააჩნია მომხმარებლის მიერ შეყვანილი url ლინკი და არ არის თვითონ კონკრეტულად ეს სადგური
-
         checker_station = Stations.query.filter(Stations.url == args.get('url'), Stations.id != id).first()
 
         # თუ არსებობს ასეთი სადგური, გავდივართ ერორზე, რომ არ მოხდეს სადგურების და ინფორმაციის დუპლიკაცია
-
         if checker_station:
             return {'error': 'აღნიშნული სადგური უკვე არსებობს!'}, 400
 
@@ -186,7 +177,6 @@ class StationsAPI(Resource):
         api_url = f'https://api.weather.com/v2/pws/observations/current?apiKey=e1f10a1e78da46f5b10a1e78da96f525&stationId={shorten_station_name}&numericPrecision=decimal&format=json&units=m'
 
         # მონაცემები ნახლდება
-
         station.station_name = args.get('station_name')
         station.url = args.get('url')
         station.api = api_url
@@ -208,7 +198,6 @@ class StationsAPI(Resource):
         '''კონკრეტული სადგურის წაშლა'''
 
         # მოწმდება აქვს თუ არა მომხმარებელს სადგურის წაშლის უფლება
-
         identity = get_jwt_identity()
 
         admin = User.query.filter_by(uuid=identity).first()
@@ -222,44 +211,10 @@ class StationsAPI(Resource):
             station = Stations.query.filter_by(id=id).first()
             if not station:
                 return {"error": "სადგური არ მოიძებნა."}, 404
-            # Remove related metadata rows before deleting the station
+            # სადგურის წაშლამდე იშლება მასთან დაკავშირებული მეტამონაცემები
             DivPositions.query.filter_by(station_id=id).delete()
             PrevPrecip.query.filter_by(station_id=id).delete()
 
             station.delete()
             return {'message': 'სადგური წარმატებით წაიშალა (აღნიშნულ სადგურზე მონაცემი არ არსებობს)'}, 200
             
-            
-            
-            
-
-# @stations_ns.route('/stations/<int:id>/toggle')
-# @stations_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Unauthorized', 404: 'Not Found'})
-# class StationToggleAPI(Resource):
-    
-#     @jwt_required()
-#     @stations_ns.doc(security="JsonWebToken")
-#     def put(self, id):
-#         '''სადგურის map_status-ის გადართვა'''
-
-#         identity = get_jwt_identity()
-
-#         admin = User.query.filter_by(uuid=identity).first()
-#         if not admin.check_permission():
-#             return {"error": 'თქვენ არ გაქვთ სადგურის რედაქტირების უფლება'}, 403
-
-#         station = Stations.query.filter_by(id=id).first()
-#         if not station:
-#             return {"error": "სადგური არ მოიძებნა."}, 404
-        
-#         # Parse only map_status
-#         from flask_restx import reqparse, inputs
-#         parser = reqparse.RequestParser()
-#         parser.add_argument("map_status", required=True, type=inputs.boolean, help="რუკაზე ჩვენების სტატუსი")
-#         args = parser.parse_args()
-        
-#         station.map_status = args.get('map_status')
-#         station.save()
-
-#         return {"message": "სადგურის სტატუსი წარმატებით განახლდა."}, 200
-

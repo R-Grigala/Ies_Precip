@@ -3,6 +3,7 @@ from src.extensions import api
 
 filter_ns = api.namespace('Filters', description='API ფილტრაციის შესახებ', path='/api')
 
+# გაფილტრული ამინდის მონაცემის დაბრუნების ფორმატი
 filter_model = filter_ns.model('Filters', {
     'id': fields.Integer(required=True, description='მონაცემის ID', example=1),
     'station_id': fields.Integer(required=True, description='სადგურის ID', example=10),
@@ -15,6 +16,7 @@ filter_model = filter_ns.model('Filters', {
 
 filter_parser = reqparse.RequestParser()
 
+# ფილტრაციისთვის საჭირო მოთხოვნის პარამეტრები
 filter_parser.add_argument("station_id",required=True, type=int, help="გთხოვთ შეიყვანეთ სადგურის ID", default=10)
 filter_parser.add_argument("date",required=True, type=str, help="გთხოვთ შეიყვანეთ თარიღი",default='2024-12-05')
 filter_parser.add_argument('start_time',required=True, type=str, help="გთხოვთ შეიყვანეთ საწყისი დრო",default='01:01:01')

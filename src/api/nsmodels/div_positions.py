@@ -5,6 +5,7 @@ from src.extensions import api
 div_positions_ns = api.namespace('Stations Div Positions', description='API სადგურების div პოზიციების შესახებ', path='/api')
 
 
+# დივ პოზიციების და მეტეომაჩვენებლების დაბრუნების მოდელი
 div_positions_model = div_positions_ns.model('Div Positions', {
     'PRECIP_ACCUM': fields.String(required=True, description='აკუმულაცია', example='0.99'),
     'PRECIP_RATE': fields.String(required=True, description='ინტენსივობა', example='0.00'),

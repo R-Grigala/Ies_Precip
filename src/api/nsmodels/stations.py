@@ -5,6 +5,7 @@ from src.extensions import api
 stations_ns = api.namespace('Stations', description='API სადგურების შესახებ', path='/api')
 
 
+# სადგურის დეტალების დაბრუნების მოდელი
 stations_model = stations_ns.model('Stations', {
     'id': fields.Integer(required=True, description='სადგურის ID', example=1),
     'station_name': fields.String(required=True, description='სადგურის სახელი', example='Bazaleti - IUNDILAA2'),
@@ -20,6 +21,7 @@ stations_model = stations_ns.model('Stations', {
 
 stations_parser = reqparse.RequestParser()
 
+# სადგურის შექმნა/რედაქტირებისთვის საჭირო ველები
 stations_parser.add_argument("station_name", required=True, type=str, help="შეიყვანეთ სადგურის სახელი")
 stations_parser.add_argument("url", required=True, type=str, help="შეიყვანეთ სადგურის wunderground-ის ლინკი")
 stations_parser.add_argument("latitude", required=True, type=float, help="შეიყვანეთ განედი")

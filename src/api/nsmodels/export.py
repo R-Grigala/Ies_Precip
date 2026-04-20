@@ -3,6 +3,7 @@ from src.extensions import api
 
 export_ns = api.namespace('Exports', description='API CSV ექპორტის შესახებ', path='/api')
 
+# სიესვი ექსპორტის ფილტრაციის პარამეტრები
 export_parser = reqparse.RequestParser()
 
 export_parser.add_argument("station_ids",required=False, type=int, action='append', help="გთხოვთ შეიყვანეთ სადგურის ID-ების სია", default=10)

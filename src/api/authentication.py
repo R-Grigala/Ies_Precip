@@ -22,7 +22,7 @@ class RegistrationApi(Resource):
         if not admin.check_permission():
             return {"message": 'თქვენ არ გაქვთ მომხმარებლის რეგისტრაციის უფლება'}, 403
     
-        # Validate password length and pattern
+        # მოწმდება პაროლის სიგრძე და შესაბამისობა
         if args["password"] != args["passwordRepeat"]:
             return {"error": "პაროლები არ ემთხვევა."}, 400
         
@@ -53,14 +53,14 @@ class AuthorizationApi(Resource):
         '''მომხმარებლის სისტემაში შესვლა'''
         args = auth_parser.parse_args()
 
-        # Look up the user by email
+        # მომხმარებლის მოძებნა ელფოსტის მიხედვით
         user = User.query.filter_by(email=args["email"]).first()
         if not user:
             return {"error": "შეყვანილი პაროლი ან ელ.ფოსტა არასწორია."}, 400
 
-        # Check if the password matches
+        # მოწმდება პაროლის სისწორე
         if user.check_password(args["password"]):
-            # Create tokens with the user's UUID as the identity
+            # იქმნება ტოკენები მომხმარებლის UUID-ის იდენტობად გამოყენებით
             access_token = create_access_token(identity=user.uuid)
             refresh_token = create_refresh_token(identity=user.uuid)
             return {
@@ -69,7 +69,7 @@ class AuthorizationApi(Resource):
                 "refresh_token": refresh_token
             }, 200
         
-        # If the password is incorrect
+        # თუ პაროლი არასწორია
         else:
             return {"error": "შეყვანილი პაროლი ან ელ.ფოსტა არასწორია."}, 400
 
