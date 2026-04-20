@@ -12,7 +12,7 @@ class WeatherData(db.Model, BaseModel):
     precip_rate = db.Column(db.String(128), nullable=False)
     precip_accum = db.Column(db.String(128), nullable=False)
     precip_accum_long = db.Column(db.String(128), default='--:--' , nullable=False)
-    precip_time = db.Column(db.DateTime, default=datetime(1970,1,1))
+    precip_time = db.Column(db.DateTime, default=datetime.now())
 
     stations = db.relationship('Stations', back_populates='weather_data')
 

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/stations/station.js') }}" defer></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/stations/stations.js') }}" defer></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/stations/editStation.js') }}" defer></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/stations/deleteStation.js') }}" defer></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/stations/addStation.js') }}" defer></script>
@@ -38,8 +38,8 @@
 </div>
 
 <!-- Modals -->
-{% include "add_station.html" %}
-{% include "edit.html" %}
-{% include "delete.html" %}
+{% include "addStation.html" %}
+{% include "editStation.html" %}
+{% include "deleteStation.html" %}
 
 {% endblock %}

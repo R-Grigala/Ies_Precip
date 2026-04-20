@@ -1,7 +1,6 @@
 from flask.cli import with_appcontext
 import click
 import csv
-from datetime import datetime
 from os import path
 
 from src.extensions import db
@@ -72,11 +71,10 @@ def populate_db():
         for row in csv_reader:
             # Create a new Station instance for each row
             new_precip = WeatherData(
-                station_id=int(row['station_id']),
+                station_id=row['station_id'],
                 precip_rate=row['precip_rate'],
                 precip_accum=row['precip_accum'],
-                precip_accum_long=row['precip_accum_long'],
-                # precip_time=row['precip_time'] 
+                precip_time=row['precip_time']
             )
             new_precip.create()
 
@@ -87,15 +85,10 @@ def populate_db():
         for row in csv_reader:
             # Create a new Station instance for each row
             new_prev_precip = PrevPrecip(
-                station_id=int(row['station_id']),
-                prev_pa=float(row['prev_pa']),
-                last_pa_long=float(row['last_pa_long']),
-                zero_start_time=datetime.strptime(row['zero_start_time'], '%Y-%m-%d %H:%M:%S')
-                # old values commented out for reference:
-                # station_id=row['station_id'],
-                # prev_pa=row['prev_pa'],
-                # last_pa_long=row['last_pa_long'],
-                # zero_start_time=row['zero_start_time']
+                station_id=row['station_id'],
+                prev_pa=row['prev_pa'],
+                last_pa_long=row['last_pa_long'],
+                zero_start_time=row['zero_start_time']
             )
             new_prev_precip.create()
     
@@ -109,13 +102,6 @@ def populate_db():
     admin_user = User (
         email="luka.varsimashvili@iliauni.edu.ge",
         password="Lukito592",
-        role_id=1
-    )
-
-    admin_user.create()
-    admin_user = User (
-        email="paata.shvelidze.1@iliauni.edu.ge",
-        password="paata333",
         role_id=1
     )
 

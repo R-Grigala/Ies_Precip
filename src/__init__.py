@@ -15,10 +15,7 @@ BLUEPRINTS = [filter_blueprint, auth_blueprint, reset_password_blueprint, statio
 COMMANDS = [init_db, populate_db, insert_db]
 
 def create_app(config=Config):
-    # app = Flask(__name__)
-  
-    static_folder = os.path.join(os.path.dirname(__file__), 'static')
-    app = Flask(__name__, static_folder=static_folder, static_url_path='/static')
+    app = Flask(__name__)
     
     CORS(app)
     app.config.from_object(config)

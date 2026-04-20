@@ -20,7 +20,7 @@ function loadStations() {
                         <td>${station.latitude}</td>
                         <td>${station.longitude}</td>
                         <td>
-                            ${station.map_status ? '<img src="../static/img/Icon.svg"  alt="Visible" class="map-status-icon">' : ''}
+                            ${station.map_status ? '<img src="../static/img/check-mark.svg"  alt="Visible" class="map-status-icon">' : ''}
                         </td>
 
                         <td>
@@ -38,26 +38,5 @@ function loadStations() {
         .catch(error => {
             console.error('Error loading stations:', error);
             showAlert('stationsAlert', 'danger', 'სადგურების ჩატვირთვა ვერ მოხერხდა.');
-        });
-}
-
-function toggleMapStatus(stationId, isChecked) {
-    makeApiRequest(`/api/stations/${stationId}/toggle`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ map_status: isChecked })
-    })
-        .then(data => {
-            if (data.message) {
-                showAlert('stationsAlert', 'success', data.message);
-            } else {
-                showAlert('stationsAlert', 'danger', (data && data.error) ? data.error : 'სტატუსის განახლება ვერ მოხერხდა.');
-            }
-        })
-        .catch(error => {
-            console.error('Error updating map status:', error);
-            showAlert('stationsAlert', 'danger', 'სტატუსის განახლება ვერ მოხერხდა.');
         });
 }
