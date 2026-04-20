@@ -7,3 +7,27 @@
     position: relative; 
     z-index: 2;
     }
+
+.filter-form {
+    width: 30vw;
+    min-width: 320px;
+}
+
+.station-actions {
+    gap: 1rem;
+}
+
+.station-modal-content {
+    border: 0;
+    border-radius: 0.8rem;
+    box-shadow: 0 12px 30px rgba(21, 45, 77, 0.25);
+}
+/* .map-status-icon{
+    width :20px;
+    height:20px;
+} */
+@media (max-width: 992px) {
+    .filter-form {
+        width: 100%;
+    }
+}

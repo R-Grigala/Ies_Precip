@@ -15,7 +15,6 @@ import requests
 @stations_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Unauthorized', 404: 'Not Found'})
 class StationsListAPI(Resource):
     
-    @stations_ns.marshal_with(stations_model)
     @jwt_required()
     @stations_ns.doc(security="JsonWebToken")
     def get(self):
@@ -25,7 +24,22 @@ class StationsListAPI(Resource):
         if not stations:
             return {"error": "სადგურები არ მოიძებნა."}, 404
         
-        return stations, 200
+        result = []
+        for station in stations:
+            div_pos = DivPositions.query.filter_by(station_id=station.id).first()
+            result.append({
+                'id': station.id,
+                'station_name': station.station_name,
+                'url': station.url,
+                'api': station.api,
+                'latitude': float(station.latitude),
+                'longitude': float(station.longitude),
+                'map_selected': div_pos.map_selected if div_pos else 1,
+                'map_status': station.map_status,
+                'fetch_status': station.fetch_status
+            })
+        
+        return result, 200
     
     @jwt_required()
     @stations_ns.doc(security="JsonWebToken")
@@ -110,7 +124,6 @@ class StationsAPI(Resource):
 
     @jwt_required()
     @stations_ns.doc(security="JsonWebToken")
-    @stations_ns.marshal_with(stations_model)
     def get(self,id):
         '''წამოვიღოთ კონკრეტული სადგურის ინფორმაცია'''
 
@@ -118,12 +131,24 @@ class StationsAPI(Resource):
         if not station:
             return {"error": "სადგური არ მოიძებნა."}, 404
         
-        return station, 200
+        div_pos = DivPositions.query.filter_by(station_id=id).first()
+        
+        return {
+            'id': station.id,
+            'station_name': station.station_name,
+            'url': station.url,
+            'api': station.api,
+            'latitude': float(station.latitude),
+            'longitude': float(station.longitude),
+            'map_selected': div_pos.map_selected if div_pos else 1,
+            'map_status': station.map_status,
+            'fetch_status': station.fetch_status
+        }, 200
     
     @jwt_required()
     @stations_ns.doc(security="JsonWebToken")
     @stations_ns.doc(parser=stations_parser)
-    def put(self,id):
+    def put(self, id):
         '''კონკრეტული სადგურის რედაქტირება'''
 
         # მოწმდება მომხმარებლის უფლებები, თუ აქვს მას სადგურის რედაქტირების უფლება
@@ -142,7 +167,7 @@ class StationsAPI(Resource):
         
         div_position = DivPositions.query.filter_by(station_id=id).first()
         if not div_position:
-            return {"error": "სადგური არ მოიძებნა."}, 404
+            return {"error": "დივის პოზიცია არ მოიძებნა."}, 404
         
         args = stations_parser.parse_args()
 
@@ -170,7 +195,7 @@ class StationsAPI(Resource):
         station.map_status = args.get('map_status')
         station.fetch_status = args.get('fetch_status')
 
-        div_position.map_selected=args.get('map_selected')
+        div_position.map_selected = args.get('map_selected')
 
         div_position.save()
         station.save()
@@ -179,7 +204,7 @@ class StationsAPI(Resource):
     
     @jwt_required()
     @stations_ns.doc(security="JsonWebToken")
-    def delete(self,id):
+    def delete(self, id):
         '''კონკრეტული სადგურის წაშლა'''
 
         # მოწმდება აქვს თუ არა მომხმარებელს სადგურის წაშლის უფლება
@@ -190,7 +215,6 @@ class StationsAPI(Resource):
         if not admin.check_permission():
             return {"error": 'თქვენ არ გაქვთ სადგურის წაშლის უფლება'}, 403
 
-
         data = WeatherData.query.filter_by(station_id=id).first()
         if data:
             return {'error': 'სადგურის წაშლა წარუმატებლად დასრულდა (აღნიშნულ სადგურზე მონაცემი არსებობს)'}, 400
@@ -198,6 +222,44 @@ class StationsAPI(Resource):
             station = Stations.query.filter_by(id=id).first()
             if not station:
                 return {"error": "სადგური არ მოიძებნა."}, 404
+            # Remove related metadata rows before deleting the station
+            DivPositions.query.filter_by(station_id=id).delete()
+            PrevPrecip.query.filter_by(station_id=id).delete()
+
             station.delete()
             return {'message': 'სადგური წარმატებით წაიშალა (აღნიშნულ სადგურზე მონაცემი არ არსებობს)'}, 200
+            
+            
+            
+            
+
+# @stations_ns.route('/stations/<int:id>/toggle')
+# @stations_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Unauthorized', 404: 'Not Found'})
+# class StationToggleAPI(Resource):
+    
+#     @jwt_required()
+#     @stations_ns.doc(security="JsonWebToken")
+#     def put(self, id):
+#         '''სადგურის map_status-ის გადართვა'''
+
+#         identity = get_jwt_identity()
+
+#         admin = User.query.filter_by(uuid=identity).first()
+#         if not admin.check_permission():
+#             return {"error": 'თქვენ არ გაქვთ სადგურის რედაქტირების უფლება'}, 403
+
+#         station = Stations.query.filter_by(id=id).first()
+#         if not station:
+#             return {"error": "სადგური არ მოიძებნა."}, 404
+        
+#         # Parse only map_status
+#         from flask_restx import reqparse, inputs
+#         parser = reqparse.RequestParser()
+#         parser.add_argument("map_status", required=True, type=inputs.boolean, help="რუკაზე ჩვენების სტატუსი")
+#         args = parser.parse_args()
+        
+#         station.map_status = args.get('map_status')
+#         station.save()
+
+#         return {"message": "სადგურის სტატუსი წარმატებით განახლდა."}, 200
 

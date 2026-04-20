@@ -12,6 +12,7 @@ stations_model = stations_ns.model('Stations', {
     'api': fields.String(required=False, description='Wunderground api-ის ლინკი', example='https://api.weather.com/v2/pws/observations/current?apiKey=e1f10a1e7..'),
     'latitude': fields.Float(required=True, description='სადგურის განედი', example=42.0163),
     'longitude': fields.Float(required=True, description='სადგურის გრძედი', example=43.1412),
+    'map_selected': fields.Integer(required=True, description='რუკის ID', example=1),
     'map_status': fields.Boolean(required=True,description='სადგურის რუკის სტატუსი',example=True),
     'fetch_status': fields.Boolean(required=True,description='სადგურის ინფორმაციის წამოღების სტატუსი',example=True)
 })

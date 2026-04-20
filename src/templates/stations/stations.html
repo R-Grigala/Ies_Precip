@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}
+    IesPrecip - Stations
+{% endblock %}
+
+{% block body %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/stations/station.js') }}" defer></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/stations/editStation.js') }}" defer></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/stations/deleteStation.js') }}" defer></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/stations/addStation.js') }}" defer></script>
+
+<div class="mt-5">
+    <div class="d-flex justify-content-center align-items-center">
+        <h2>სადგურები</h2>
+    </div>
+    <div class="d-flex justify-content-center station-actions mt-3">
+        <button class="btn btn-sm btn-primary" type="button" onclick="openAddStationModal()">სადგურის დამატება</button>
+    </div>
+    <div id="stationsAlert"></div>
+    <div class="table-responsive-xxl text-center mt-3" style="font-size: small;">
+        <table class="table align-middle table-bordered rounded-2 border-muted mb-0 bg-white table-striped">
+            <thead class="table-secondary">
+                <tr>
+                    <th>ID</th>
+                    <th>სადგურის სახელი</th>
+                    <th>განედი</th>
+                    <th>გრძედი</th>
+                    <th>რუკაზე ჩვენება</th>
+                    <th>მოქმედებები</th>
+                </tr>
+            </thead>
+            <tbody id="stationsTable">
+                <!-- Stations will be populated dynamically here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modals -->
+{% include "add_station.html" %}
+{% include "edit.html" %}
+{% include "delete.html" %}
+
+{% endblock %}

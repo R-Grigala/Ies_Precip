@@ -20,7 +20,7 @@ class Stations(db.Model, BaseModel):
     weather_data = db.relationship('WeatherData', back_populates='stations')
     prev_precip = db.relationship('PrevPrecip', back_populates='stations')
 
-    div_positions = db.relationship('DivPositions', back_populates='stations')
+    div_positions = db.relationship('DivPositions', back_populates='stations', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<Station(id={self.id}, name={self.station_name})>"

@@ -1,0 +1,65 @@
+<!-- Edit Station Modal -->
+<div class="modal fade" id="EditStationModal" tabindex="1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content station-modal-content">
+            <header class="modal-header">
+                <h4 class="modal-title">სადგურის რედაქტირება</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </header>
+
+            <section class="modal-body">
+                <div id="editStationAlert"></div>
+
+                <form id="editStationForm" class="row g-3">
+                    <input type="hidden" id="editStationId" name="id">
+                    <fieldset class="col-md-6">
+                        <label for="editStationName" class="form-label">სადგურის სახელი</label>
+                        <input type="text" class="form-control" id="editStationName" name="station_name" placeholder="მაგ: Bazaleti - IUNDILAA2" required>
+                    </fieldset>
+
+                    <fieldset class="col-md-6">
+                        <label for="editStationUrl" class="form-label">Wunderground URL</label>
+                        <input type="url" class="form-control" id="editStationUrl" name="url" placeholder="https://www.wunderground.com/dashboard/pws/IXXXXXXX" required>
+                    </fieldset>
+
+                    <fieldset class="col-md-6">
+                        <label for="editLatitude" class="form-label">განედი (Latitude)</label>
+                        <input type="number" class="form-control" id="editLatitude" name="latitude" step="any" placeholder="41.715" required>
+                    </fieldset>
+
+                    <fieldset class="col-md-6">
+                        <label for="editLongitude" class="form-label">გრძედი (Longitude)</label>
+                        <input type="number" class="form-control" id="editLongitude" name="longitude" step="any" placeholder="44.827" required>
+                    </fieldset>
+
+                    <fieldset class="col-md-4">
+                        <label for="editMapSelected" class="form-label">რუკის ID</label>
+                        <select class="form-select" id="editMapSelected" name="map_selected" required>
+                            <option value="0">0 - მთლიანი</option>
+                            <option value="1">1 - თბილისი</option>
+                        </select>
+                    </fieldset>
+
+                    <fieldset class="col-md-4 d-flex align-items-end">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="editMapStatus" name="map_status">
+                            <label class="form-check-label" for="editMapStatus">რუკაზე გამოჩენა</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="col-md-4 d-flex align-items-end">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="editFetchStatus" name="fetch_status">
+                            <label class="form-check-label" for="editFetchStatus">მონაცემების წამოღება</label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="col-12 text-center mt-4">
+                        <button type="submit" class="btn btn-success btn-sm" id="submitEditStationBtn">შენახვა</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">გაუქმება</button>
+                    </fieldset>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

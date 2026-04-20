@@ -18,14 +18,14 @@ class Config(object):
     RESTX_MASK_SWAGGER = False
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(BASE_DIR, 'db.sqlite')
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(BASE_DIR, 'db.sqlite')
     
     MYSQL_HOST = os.getenv('MYSQL_HOST', 'default_host')
     MYSQL_DATABASE = os.getenv('MYSQL_DATABASE', 'default_database')
     MYSQL_USER = os.getenv('MYSQL_USER', 'default_user')
     MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'default_password')
-    # MySQL connection URI
-    SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
+    # # MySQL connection URI
+    # SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}'
 
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'default_jwt_secret_key')
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)

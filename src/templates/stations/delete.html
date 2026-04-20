@@ -1,0 +1,22 @@
+<!-- Delete Station Modal -->
+<div class="modal fade" id="DeleteStationModal" tabindex="1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <header class="modal-header">
+                <h4 class="modal-title">სადგურის წაშლა</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </header>
+
+            <section class="modal-body">
+                <div id="deleteStationAlert"></div>
+                <p>დარწმუნებული ხართ, რომ გსურთ წაშალოთ სადგური <strong id="deleteStationName"></strong>?</p>
+                <p class="text-danger">ეს მოქმედება შეუქცევადია!</p>
+            </section>
+
+            <footer class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">გაუქმება</button>
+                <button type="button" class="btn btn-danger btn-sm" id="confirmDeleteStationBtn">წაშლა</button>
+            </footer>
+        </div>
+    </div>
+</div>
