@@ -10,3 +10,8 @@ auth_blueprint = Blueprint("auth", __name__, template_folder=TEMPLATES_FOLDER)
 def login():
     message = request.args.get('message')
     return render_template("login.html", message=message)
+
+
+@auth_blueprint.route("/accounts")
+def accounts():
+    return render_template("accounts.html")

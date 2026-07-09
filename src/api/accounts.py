@@ -24,7 +24,8 @@ class UserApi(Resource):
         return user, 200
 
 # აპი, რომელსაც გადაეცემა არგუმენტად მომხმარებლის ID
-@accounts_ns.route('/user/<int:uuid>')
+@accounts_ns.route('/user/<string:uuid>')
+#@accounts_ns.route('/user/<int:uuid>')
 @accounts_ns.doc(responses={200: 'OK', 400: 'Invalid Argument', 401: 'JWT Token Expires', 403: 'Forbidden', 404: 'Not Found'})
 class UserActionsApi(Resource):
     @jwt_required()

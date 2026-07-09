@@ -71,6 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Clear old project table data
                 const precipDataTable = document.getElementById('precipDataTable');
                 precipDataTable.innerHTML = '';
+
+                if (data && data.error) {
+                    showAlert('alertPlaceholder', 'danger', data.error);
+                }
                 
                 // Append new filtered data to the table
                 if (Array.isArray(data) && data.length > 0) {
